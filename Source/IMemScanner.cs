@@ -8,10 +8,10 @@ namespace RapidMemory;
 
 public interface IMemScanner : IDisposable
 {
-    void Read<T>(UIntPtr memoryAddress, out T value) where T : unmanaged;
-    void ReadBytes(IntPtr memoryAddress, out byte[] value, int length);
-    void Write<T>(UIntPtr memoryAddress, ref T item) where T : unmanaged;
+    void Read<T>(nuint memoryAddress, out T value) where T : unmanaged;
+    void ReadBytes(nint memoryAddress, out byte[] value, int length);
+    void Write<T>(nuint memoryAddress, ref T item) where T : unmanaged;
     IEnumerable<PatternScanResult> FindPatterns(IReadOnlyList<BytePattern> bytePatterns);
     PatternScanResult FindPattern(BytePattern bytePattern);
-    MemPageProtection ChangePageProtection(UIntPtr memoryAddress, long size, MemPageProtection newProtection);
+    MemPageProtection ChangePageProtection(nuint memoryAddress, long size, MemPageProtection newProtection);
 }

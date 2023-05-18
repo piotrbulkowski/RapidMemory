@@ -62,14 +62,14 @@ namespace RapidMemory
             }
         }
 
-        public void Read<T>(UIntPtr memoryAddress, out T value) where T : unmanaged
+        public void Read<T>(nuint memoryAddress, out T value) where T : unmanaged
         {
             var structSize = Unsafe.SizeOf<T>();
             var buffer = GC.AllocateUninitializedArray<byte>(structSize, false);
 
             fixed (byte* bufferPtr = buffer)
             {
-                var isSuccess = Imports.ReadProcessMemory(_gameProcess.Handle, memoryAddress, (UIntPtr)bufferPtr, (UIntPtr)structSize, out _);
+                var isSuccess = Imports.ReadProcessMemory(_gameProcess.Handle, memoryAddress, (nuint)bufferPtr, (nuint)structSize, out _);
                 if (!isSuccess)
                 {
                     throw new MemoryOperationException($"ReadProcessMemory failed to read from {memoryAddress}, bytes: {structSize}");
@@ -78,19 +78,19 @@ namespace RapidMemory
             }
         }
 
-        public void ReadBytes(IntPtr memoryAddress, out byte[] value, int length)
+        public void ReadBytes(nint memoryAddress, out byte[] value, int length)
         {
             value = GC.AllocateUninitializedArray<byte>(length, false);
             fixed (byte* bufferPtr = value)
             {
-                var isSuccess = Imports.ReadProcessMemory(_gameProcess.Handle, memoryAddress, (IntPtr)bufferPtr, (UIntPtr) value.Length, out _);
+                var isSuccess = Imports.ReadProcessMemory(_gameProcess.Handle, memoryAddress, (nint)bufferPtr, (nuint) value.Length, out _);
                 if (!isSuccess)
                 {
                     throw new MemoryOperationException($"ReadProcessMemory failed to read from {memoryAddress}, bytes: {length}");
                 }
             }
         }
-        public void Write<T>(UIntPtr memoryAddress, ref T item) where T : unmanaged
+        public void Write<T>(nuint memoryAddress, ref T item) where T : unmanaged
         {
             var itemSize = Unsafe.SizeOf<T>();
             var bytes = GC.AllocateUninitializedArray<byte>(itemSize, false);
@@ -99,7 +99,7 @@ namespace RapidMemory
 
             fixed (byte* bytePtr = bytes)
             {
-                var isSuccess = Imports.WriteProcessMemory(_gameProcess.Handle, memoryAddress, (UIntPtr)bytePtr, (UIntPtr)bytes.Length, out _);
+                var isSuccess = Imports.WriteProcessMemory(_gameProcess.Handle, memoryAddress, (nuint)bytePtr, (nuint)bytes.Length, out _);
 
                 if (!isSuccess)
                 {
@@ -109,17 +109,17 @@ namespace RapidMemory
             }
         }
         
-        public MemPageProtection ChangePageProtection(UIntPtr memoryAddress, long size, MemPageProtection newProtection)
+        public MemPageProtection ChangePageProtection(nuint memoryAddress, long size, MemPageProtection newProtection)
         {
-            var isSuccess = Imports.VirtualProtectEx(_gameProcess.Handle, memoryAddress, (UIntPtr) size, newProtection, out var oldPermissions);
+            var isSuccess = Imports.VirtualProtectEx(_gameProcess.Handle, memoryAddress, (nuint) size, newProtection, out var oldPermissions);
 
             if (!isSuccess)
             {
                 throw new MemoryOperationException($"Unable to change permissions for " +
                                                    $"the memory address: {memoryAddress} ," +
                                                    $"size: {size} ," +
-                                                   $"new protection: {newProtection.ToString()} ," +
-                                                   $"old protection: {oldPermissions.ToString()}");
+                                                   $"new protection: {newProtection} ," +
+                                                   $"old protection: {oldPermissions}");
             }
 
             return oldPermissions;

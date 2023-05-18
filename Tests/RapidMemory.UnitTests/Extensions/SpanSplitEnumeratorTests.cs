@@ -1,4 +1,4 @@
-﻿using RapidMemory.Scanner.Extensions;
+﻿using RapidMemory.Extensions;
 using Xunit;
 
 namespace RapidMemory.Scanner.UnitTests.Extensions;
