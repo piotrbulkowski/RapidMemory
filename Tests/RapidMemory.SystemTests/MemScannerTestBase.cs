@@ -6,22 +6,29 @@ namespace RapidMemory.Scanner.SystemTests;
 
 public abstract class MemScannerTestBase : IDisposable
 {
-    protected readonly Process GameProcess;
-    public const string GameProcessName = "Gw";
+    protected readonly Process DestinationProcess;
 
     protected MemScannerTestBase()
     {
+        const string ProcessName = "RapidMemory.SystemTests.ExternalApp";
+
         var systemProcesses = Process.GetProcesses();
-        GameProcess = systemProcesses.FirstOrDefault(p => p.ProcessName.Equals(GameProcessName));
-        if (GameProcess is null)
+        DestinationProcess = systemProcesses.FirstOrDefault(p => p.ProcessName.Equals(ProcessName));
+        if (DestinationProcess is null)
         {
-            throw new InvalidOperationException("Game must be running for tests to run!");
+            StartTestableApplication();
         }
+    }
+
+
+    private void StartTestableApplication()
+    {
+
     }
 
     public void Dispose()
     {
-        GameProcess?.Dispose();
+        DestinationProcess?.Dispose();
         GC.SuppressFinalize(this);
     }
 }

@@ -6,9 +6,9 @@ namespace RapidMemory.Scanner.SystemTests.MemScanner
     public sealed class MemScannerTests : MemScannerTestBase
     {
         [Fact]
-        public void Given_ValidGameProcess_Ctor_ShouldCreateMemScanner()
+        public void Given_ValidProcess_Ctor_ShouldCreateMemScanner()
         {
-            var memScanner = new RapidMemory.MemScanner(GameProcess);
+            var memScanner = new RapidMemory.MemScanner(DestinationProcess);
             
             Assert.NotNull(memScanner);
         }
@@ -16,7 +16,7 @@ namespace RapidMemory.Scanner.SystemTests.MemScanner
         public void Given_ValidPointers_FindPattern_ShouldReturnValidAdresses()
         {
             throw new NotImplementedException();
-            var memScanner = new RapidMemory.MemScanner(GameProcess);
+            var memScanner = new RapidMemory.MemScanner(DestinationProcess);
             
             //var basePtr = memScanner.FindPattern(AobPatterns.ScanBasePtr);
             //var agentBasePtr = memScanner.FindPattern(AobPatterns.ScanAgentBasePtr);
